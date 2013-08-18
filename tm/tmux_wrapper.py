@@ -75,3 +75,7 @@ def create_or_attach(session):
 
 def run_shell_command(command):
     tmux_command("send-keys \"{}\" C-m".format(command))
+
+
+def rename_window(name):
+    tmux_command("rename-window {}".format(name))
