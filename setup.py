@@ -7,8 +7,8 @@ setup(name="tm",
       license="MIT",
       packages=["tm"],
       entry_points = {
-              "console_scripts": [
-                  "tm = tm.tm:main",
-              ],
-          },
+          "console_scripts": [
+              "tm = tm.tm:main",
+          ],
+      },
       long_description="A tmux wrapper featuring shortcuts and session presets.")
