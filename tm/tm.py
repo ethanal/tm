@@ -9,6 +9,13 @@ __version__ = 1.0
 __description__ = "A tmux wrapper featuring shortcuts and session presets."
 
 
+def parse_error(error):
+    if "session not found" in error:
+        print("Session not found")
+    elif "failed to connect to server" in error:
+        print("tmux server not currently running")
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description=__description__)
     parser.add_argument("session",
@@ -26,9 +33,11 @@ def main(argv):
 
     args = parser.parse_args()
 
+
     if len(argv) == 0:
         parser.print_help()
 
+    err = ""
     if args.kill:
         p = subprocess.Popen("tmux kill-session -t {}".format(args.kill),
                              stdout=subprocess.PIPE,
@@ -47,6 +56,8 @@ def main(argv):
                              stderr=subprocess.PIPE,
                              shell=True)
         out, err = p.communicate()
+
+    parse_error(err)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
