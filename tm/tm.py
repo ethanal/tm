@@ -47,10 +47,13 @@ def main(argv):
     if args.kill:
         try:
             tmux.kill(args.kill)
-        except tmux.ServerConnectionError, e:
+        except (tmux.ServerConnectionError, tmux.SessionDoesNotExist), e:
             print(e.description)
     elif args.list:
-        print tmux.list()
+        try:
+            print tmux.list()
+        except tmux.ServerConnectionError, e:
+            print(e.description)
     elif args.session:
         tmux.create_or_attach(args.session)
 
