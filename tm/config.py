@@ -19,8 +19,7 @@ def load_config():
         return None
 
 
-def load_session_presets(session):
+def load_session_preset(session):
     config = load_config()
-    if config is None:
-        print "none"
+    if config is None or session not in config:
         return

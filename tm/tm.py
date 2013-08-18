@@ -24,6 +24,10 @@ def main(argv):
                         metavar="session",
                         action="store",
                         help="kill a session")
+    parser.add_argument("-r", "--restart",
+                        action="store_true",
+                        help="kill sessions running under the same name "
+                             "when starting a session")
 
     args = parser.parse_args()
 
@@ -43,8 +47,17 @@ def main(argv):
             print(e.description)
     elif args.session:
         # if session was created
-        if tmux.create_or_attach(args.session):
-            config.load_session_presets(args.session)
+        if args.restart:
+            try:
+                tmux.kill(args.session)
+            except (tmux.ServerConnectionError, tmux.SessionDoesNotExist):
+                pass
+            tmux.create(args.session)
+            config.load_session_preset(args.session)
+
+        else:
+            if tmux.create_or_attach(args.session):
+                config.load_session_preset(args.session)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
