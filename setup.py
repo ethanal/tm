@@ -11,4 +11,4 @@ setup(name="tm",
               "tm = tm.tm:main",
           ],
       },
-      long_description="A tmux wrapper featuring shortcuts and session presets.")
+      long_description=tm.__description__)
