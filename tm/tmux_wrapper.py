@@ -26,11 +26,7 @@ def command(command):
     return p.communicate()
 
 def kill(session):
-    p = subprocess.Popen("tmux kill-session -t {}".format(session),
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=True)
-    out, err = p.communicate()
+    out, err = command("kill-session -t {}".format(session))
 
     if "session not found" in err:
         raise SessionDoesNotExist(session)
@@ -39,40 +35,28 @@ def kill(session):
 
 
 def list():
-    p = subprocess.Popen("tmux ls",
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=True)
-    out, err = p.communicate()
+    out, err = command("ls")
 
     if "failed to connect to server" in err:
         raise ServerConnectionError()
     return out
 
 def create(session):
-    p = subprocess.Popen("tmux new -s {}".format(session),
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=True)
-    out, err = p.communicate()
+    out, err = command("new -s {}".format(session))
 
     if "duplicate session" in err:
         raise SessionExists(session)
 
 
 def attach(session):
-    p = subprocess.Popen("tmux attach-session -t {}".format(session),
-                     stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE,
-                     shell=True)
-    out, err = p.communicate()
+    out, err = command("attach-session -t {}".format(session))
 
     if "no sessions" in err:
         raise SessionDoesNotExist(session)
 
 
 def create_or_attach(session):
-
+    try:
         create(session)
     except SessionExists:
         attach(session)
