@@ -54,7 +54,7 @@ def create(session):
 
 
 def attach(session):
-    r = command("attach-session -t {}".format(session))
+    r = command("attach-session -d -t {}".format(session))
 
     if "no sessions" in r.err:
         raise SessionDoesNotExist(session)
@@ -68,5 +68,7 @@ def has_session(session):
 def create_or_attach(session):
     if has_session(session):
         attach(session)
+        return False
     else:
         create(session)
+        return True

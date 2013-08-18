@@ -1,27 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import json
-import os
 import sys
 import argparse
 import tmux_wrapper as tmux
+import config
 
 __version__ = 1.0
 __description__ = "A tmux wrapper featuring shortcuts and session presets."
 
-
-def load_session_presets():
-    try:
-        file_path = os.environ["TM_SESSIONS"]
-    except KeyError:
-        return None
-
-    try:
-        with open(file_path) as f:
-            config = json.load(f)
-    except IOError:
-        print("Invalid TM_SESSIONS environmental variable: cannot open file {}".format(file_path))
 
 def main(argv):
     parser = argparse.ArgumentParser(description=__description__)
@@ -55,7 +42,9 @@ def main(argv):
         except tmux.ServerConnectionError, e:
             print(e.description)
     elif args.session:
-        tmux.create_or_attach(args.session)
+        # if session was created
+        if tmux.create_or_attach(args.session):
+            config.load_session_presets(args.session)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
