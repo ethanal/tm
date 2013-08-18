@@ -51,7 +51,7 @@ def main(argv):
             print(e.description)
     elif args.list:
         try:
-            print tmux.list()
+            print tmux.list(),
         except tmux.ServerConnectionError, e:
             print(e.description)
     elif args.session:
