@@ -25,9 +25,10 @@ def load_session_preset(session):
         return
 
     for window_index, window in enumerate(config[session]["windows"]):
-        # if window_index != 0:
-
-        # tmux.rename_window(window["name"])
+        if window_index == 0:
+            tmux.rename_window(window["name"])
+        else:
+            tmux.new_window(window["name"])
         tmux.run_shell_command("clear")
         for command in window["commands"]:
             tmux.run_shell_command(command)

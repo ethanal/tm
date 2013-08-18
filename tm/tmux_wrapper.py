@@ -52,10 +52,12 @@ def list():
 
 
 def create(session):
+    print "creating"
     tmux_command("new-session -d -s {}".format(session))
 
 
 def attach(session):
+    print "attaching"
     tmux_command("attach-session -t {}".format(session))
 
 
@@ -78,6 +80,10 @@ def create_or_attach(session):
 
 def run_shell_command(command):
     tmux_command("send-keys \"{}\" C-m".format(command))
+
+
+def new_window(name):
+    tmux_command("new-window -n '{}'".format(name))
 
 
 def rename_window(name):
