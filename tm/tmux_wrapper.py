@@ -60,9 +60,13 @@ def attach(session):
         raise SessionDoesNotExist(session)
 
 
-def create_or_attach(session):
-    try:
-        create(session)
-    except SessionExists:
-        attach(session)
+def has_session(session):
+    r = command("has-session -t {}".format(session))
+    return r.process.returncode == 0
 
+
+def create_or_attach(session):
+    if has_session(session):
+        attach(session)
+    else:
+        create(session)
