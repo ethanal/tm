@@ -23,3 +23,7 @@ def load_session_preset(session):
     config = load_config()
     if config is None or session not in config:
         return
+
+    for window in config[session]["windows"]:
+        # tmux.run_shell_command()
+        pass

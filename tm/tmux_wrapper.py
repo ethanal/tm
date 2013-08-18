@@ -23,45 +23,44 @@ class CommandResponse(object):
         self.out, self.err = process.communicate()
 
 
-def command(command):
+def tmux_command(command):
     p = subprocess.Popen("tmux " + command,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,
                          shell=True)
-    return CommandResponse(p)
-
-def kill(session):
-    r = command("kill-session -t {}".format(session))
+    r = CommandResponse(p)
 
     if "session not found" in r.err:
-        raise SessionDoesNotExist(session)
+        raise SessionDoesNotExist()
     if "failed to connect to server" in r.err:
         raise ServerConnectionError()
+    if "duplicate session" in r.err:
+        raise SessionExists()
+    if "no sessions" in r.err:
+        raise SessionDoesNotExist()
+
+    return r
+
+
+def kill(session):
+    tmux_command("kill-session -t {}".format(session))
 
 
 def list():
-    r = command("ls")
-
-    if "failed to connect to server" in r.err:
-        raise ServerConnectionError()
+    r = tmux_command("ls")
     return r.out
 
-def create(session):
-    r = command("new -s {}".format(session))
 
-    if "duplicate session" in r.err:
-        raise SessionExists(session)
+def create(session):
+    tmux_command("new -s {}".format(session))
 
 
 def attach(session):
-    r = command("attach-session -d -t {}".format(session))
-
-    if "no sessions" in r.err:
-        raise SessionDoesNotExist(session)
+    tmux_command("attach-session -d -t {}".format(session))
 
 
 def has_session(session):
-    r = command("has-session -t {}".format(session))
+    r = tmux_command("has-session -t {}".format(session))
     return r.process.returncode == 0
 
 
@@ -72,3 +71,7 @@ def create_or_attach(session):
     else:
         create(session)
         return True
+
+
+def run_shell_command(command):
+    tmux_command("send-keys \"{}\" C-m".format(command))
