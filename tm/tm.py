@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import json
+import os
 import sys
 import subprocess
 import argparse
@@ -15,6 +17,18 @@ def parse_common_errors(error):
     elif "failed to connect to server" in error:
         print("tmux server not currently running")
 
+
+def load_session_presets():
+    try:
+        file_path = os.environ["TM_SESSIONS"]
+    except KeyError:
+        return None
+
+    try:
+        with open(file_path) as f:
+            config = json.load(f)
+    except IOError:
+        print("Invalid TM_SESSIONS environmental variable: cannot open file {}".format(file_path))
 
 def main(argv):
     parser = argparse.ArgumentParser(description=__description__)
