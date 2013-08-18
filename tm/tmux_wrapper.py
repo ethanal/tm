@@ -17,41 +17,46 @@ class SessionDoesNotExist(Exception):
     description = "Session does not exist."
     pass
 
+class CommandResponse(object):
+    def __init__(self, process):
+        self.process = process
+        self.out, self.err = process.communicate()
+
 
 def command(command):
     p = subprocess.Popen("tmux " + command,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,
                          shell=True)
-    return p.communicate()
+    return CommandResponse(p)
 
 def kill(session):
-    out, err = command("kill-session -t {}".format(session))
+    r = command("kill-session -t {}".format(session))
 
-    if "session not found" in err:
+    if "session not found" in r.err:
         raise SessionDoesNotExist(session)
-    if "failed to connect to server" in err:
+    if "failed to connect to server" in r.err:
         raise ServerConnectionError()
 
 
 def list():
-    out, err = command("ls")
+    r = command("ls")
 
-    if "failed to connect to server" in err:
+    if "failed to connect to server" in r.err:
         raise ServerConnectionError()
-    return out
+    return r.out
 
 def create(session):
-    out, err = command("new -s {}".format(session))
+    r = command("new -s {}".format(session))
 
-    if "duplicate session" in err:
+    if "duplicate session" in r.err:
         raise SessionExists(session)
 
 
 def attach(session):
-    out, err = command("attach-session -t {}".format(session))
+    r = command("attach-session -t {}".format(session))
 
-    if "no sessions" in err:
+    if "no sessions" in r.err:
         raise SessionDoesNotExist(session)
 
 
