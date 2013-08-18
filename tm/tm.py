@@ -26,13 +26,27 @@ def main(argv):
 
     args = parser.parse_args()
 
-    err = ""
+    if len(argv) == 0:
+        parser.print_help()
+
     if args.kill:
-        pass
+        p = subprocess.Popen("tmux kill-session -t {}".format(args.kill),
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=True)
+        out, err = p.communicate()
     elif args.list:
-        pass
+        p = subprocess.Popen("tmux ls",
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=True)
+        out, err = p.communicate()
     elif args.session:
-        pass
+        p = subprocess.Popen("tmux new -s {}".format(args.session),
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=True)
+        out, err = p.communicate()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
