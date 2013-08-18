@@ -52,16 +52,19 @@ def list():
 
 
 def create(session):
-    tmux_command("new -s {}".format(session))
+    tmux_command("new-session -d -s {}".format(session))
 
 
 def attach(session):
-    tmux_command("attach-session -d -t {}".format(session))
+    tmux_command("attach-session -t {}".format(session))
 
 
 def has_session(session):
-    r = tmux_command("has-session -t {}".format(session))
-    return r.process.returncode == 0
+    try:
+        r = tmux_command("has-session -t {}".format(session))
+        return r.process.returncode == 0
+    except ServerConnectionError:
+        return False
 
 
 def create_or_attach(session):

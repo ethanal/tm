@@ -24,6 +24,7 @@ def load_session_preset(session):
     if config is None or session not in config:
         return
 
-    for window in config[session]["windows"]:
-        # tmux.run_shell_command()
-        pass
+    for i, window in enumerate(config[session]["windows"]):
+        # tmux.rename_window(window["name"])
+        for command in window["commands"]:
+            tmux.run_shell_command(command)

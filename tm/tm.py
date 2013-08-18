@@ -4,7 +4,7 @@
 import sys
 import argparse
 import tmux_wrapper as tmux
-import config
+import sessions
 
 __version__ = 1.0
 __description__ = "A tmux wrapper featuring shortcuts and session presets."
@@ -53,11 +53,11 @@ def main(argv):
             except (tmux.ServerConnectionError, tmux.SessionDoesNotExist):
                 pass
             tmux.create(args.session)
-            config.load_session_preset(args.session)
-
+            sessions.load_session_preset(args.session)
         else:
             if tmux.create_or_attach(args.session):
-                config.load_session_preset(args.session)
+                sessions.load_session_preset(args.session)
 
+        tmux.attach(args.session)
 if __name__ == "__main__":
     main(sys.argv[1:])
