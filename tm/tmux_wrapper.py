@@ -63,7 +63,7 @@ def has_session(session):
     try:
         r = tmux_command("has-session -t {}".format(session))
         return r.process.returncode == 0
-    except ServerConnectionError:
+    except (ServerConnectionError, SessionDoesNotExist):
         return False
 
 
