@@ -5,7 +5,6 @@ import json
 import os
 import time
 import tmux_wrapper as tmux
-from pprint import pprint
 
 id_counter = 0
 
@@ -49,20 +48,23 @@ def mark_panes(data):
             data["panes"][i] = mark_panes(pane)
         return data
 
+
 def make_pane_set(data):
     if "split" not in data:
-        # base case - run commands
-        pass
+        if "commands" in data:
+            for command in data["commands"]:
+                tmux.run_shell_command(data["id"], command)
+        print data
     else:
         cumulative = 0
         for pane in data["panes"]:
-            print("{} split, {}%".format(data["split"], pane["size"]))
             percentage = pane["size"]
             parent_percentage = percentage / (100.0 - cumulative) * 100.0
             cumulative += percentage
             if cumulative < 99:
                 tmux.split_window(pane["id"], data["split"], 100 - int(parent_percentage))
             make_pane_set(pane)
+
 
 def load_session_preset(session):
     global id_counter
@@ -80,9 +82,4 @@ def load_session_preset(session):
         else:
             tmux.new_window(name)
         data = mark_panes(data)
-        pprint(data)
         make_pane_set(data)
-        # sleep so the shell has time to start up before commands are run
-        # time.sleep(1)
-        # for command in window["commands"]:
-        #     tmux.run_shell_command(command)

@@ -76,8 +76,8 @@ def create_or_attach(session):
         return True
 
 
-def run_shell_command(command):
-    tmux_command("send-keys \"{}\" C-m".format(command))
+def run_shell_command(pane, command):
+    tmux_command("send-keys -t {} \"{}\" C-m".format(pane, command))
 
 
 def new_window(name):
@@ -87,9 +87,10 @@ def new_window(name):
 def rename_window(name):
     tmux_command("rename-window {}".format(name))
 
+
 def split_window(pane, direction, percentage):
-    print pane
     tmux_command("split-window -t {} -{} -p {}".format(pane, direction[0], str(percentage)))
+
 
 def select_pane(pane):
     tmux_command("select-pane -t {}".format(pane))
