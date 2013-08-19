@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from collections import deque
+from collections import OrderedDict
 import json
 import os
-import time
 import tmux_wrapper as tmux
 
 id_counter = 0
@@ -16,7 +15,7 @@ def load_config():
 
     try:
         with open(file_path) as f:
-            return json.load(f)
+            return json.load(f, object_pairs_hook=OrderedDict)
     except IOError:
         print("Invalid TM_SESSIONS environmental variable: "
               "cannot open file {}".format(file_path))
@@ -54,7 +53,6 @@ def make_pane_set(data):
         if "commands" in data:
             for command in data["commands"]:
                 tmux.run_shell_command(data["id"], command)
-        print data
     else:
         cumulative = 0
         for pane in data["panes"]:
@@ -73,13 +71,14 @@ def load_session_preset(session):
     if config is None or session not in config:
         return
 
-    first = True
+    window_index = 0
     for name, data in config[session].items():
         id_counter = 0
-        if first:
-            tmux.rename_window(name)
-            first = False
+        if window_index == 0:
+            tmux.rename_window(window_index, name)
         else:
-            tmux.new_window(name)
+            tmux.new_window(window_index, name)
         data = mark_panes(data)
         make_pane_set(data)
+        window_index += 1
+    tmux.select_window(0)

@@ -80,12 +80,12 @@ def run_shell_command(pane, command):
     tmux_command("send-keys -t {} \"{}\" C-m".format(pane, command))
 
 
-def new_window(name):
-    tmux_command("new-window -n '{}'".format(name))
+def new_window(index, name):
+    tmux_command("new-window -t {} -n '{}'".format(index, name))
 
 
-def rename_window(name):
-    tmux_command("rename-window {}".format(name))
+def rename_window(index, name):
+    tmux_command("rename-window -t {} {}".format(index, name))
 
 
 def split_window(pane, direction, percentage):
@@ -94,4 +94,7 @@ def split_window(pane, direction, percentage):
 
 def select_pane(pane):
     tmux_command("select-pane -t {}".format(pane))
+
+def select_window(window):
+    tmux_command("select-window -t {}".format(window))
 
