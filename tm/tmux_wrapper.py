@@ -52,12 +52,10 @@ def list():
 
 
 def create(session):
-    print "creating"
     tmux_command("new-session -d -s {}".format(session))
 
 
 def attach(session):
-    print "attaching"
     tmux_command("attach-session -t {}".format(session))
 
 
@@ -88,3 +86,11 @@ def new_window(name):
 
 def rename_window(name):
     tmux_command("rename-window {}".format(name))
+
+def split_window(pane, direction, percentage):
+    print pane
+    tmux_command("split-window -t {} -{} -p {}".format(pane, direction[0], str(percentage)))
+
+def select_pane(pane):
+    tmux_command("select-pane -t {}".format(pane))
+

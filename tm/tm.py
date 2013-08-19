@@ -46,7 +46,7 @@ def main(argv):
         except tmux.ServerConnectionError, e:
             print(e.description)
     elif args.session:
-        # if session was created
+        print("Creating and configuring session...")
         if args.restart:
             try:
                 tmux.kill(args.session)
@@ -56,8 +56,10 @@ def main(argv):
             sessions.load_session_preset(args.session)
             tmux.attach(args.session)
         else:
+            # if session was created
             if tmux.create_or_attach(args.session):
                 sessions.load_session_preset(args.session)
+                tmux.attach(args.session)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
