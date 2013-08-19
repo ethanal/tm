@@ -10,7 +10,10 @@ __version__ = 1.0
 __description__ = "A tmux wrapper featuring shortcuts and session presets."
 
 
-def main(argv):
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+
     parser = argparse.ArgumentParser(description=__description__)
     parser.add_argument("session",
                         metavar="session",
