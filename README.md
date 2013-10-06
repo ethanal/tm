@@ -1,18 +1,24 @@
-tm
-==
+# tm
 
 A tmux wrapper featuring shortcuts and session presets.
 
-Usage
------
+## Installation
+
+Install using the setup.py script (may need root).
+
+```bash
+$ python setup.py install
+```
+
+## Usage
 
 ```
-tm.py [-h] [-l] [-k session] [-r] [session]
+tm [-h] [-l] [-k session] [-r] [session]
 
 A tmux wrapper featuring shortcuts and session presets.
 
 positional arguments:
-  session               the name of the tmux session to start or attach to
+  session               the name of the tmux session to start or attach
 
 optional arguments:
   -h, --help            show help message and exit
@@ -23,8 +29,20 @@ optional arguments:
                         starting a session
 ```
 
-Configuration
--------------
+### Examples
+
+```bash
+$ tm -l           # List all active tmux sessions.
+$ tm foobar       # Start a new session named `foobar`. If the session is defined
+                  # in your configuration file (see below), initialize that session.
+$ tm foobar -r    # Kill and restart the session named `foobar` if it already exists.
+                  # Otherwise start the session like normal.
+$ tm -k foobar    # Kill the session called `foobar`.
+```
+
+
+
+## Configuration
 
 Session configuration should be stored in the a JSON file set by the `TM_SESSIONS` environmental variable (e.g. `TM_SESSIONS=~/.tm_config.json`).
 
