@@ -3,6 +3,26 @@ tm
 
 A tmux wrapper featuring shortcuts and session presets.
 
+Usage
+-----
+
+```
+tm.py [-h] [-l] [-k session] [-r] [session]
+
+A tmux wrapper featuring shortcuts and session presets.
+
+positional arguments:
+  session               the name of the tmux session to start or attach to
+
+optional arguments:
+  -h, --help            show help message and exit
+  -l, --list            list all open sessions and session presets
+  -k session, --kill session
+                        kill a session
+  -r, --restart         kill sessions running under the same name when
+                        starting a session
+```
+
 Configuration
 -------------
 
