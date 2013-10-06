@@ -49,7 +49,7 @@ def main(argv=None):
         except tmux.ServerConnectionError, e:
             print(e.description)
     elif args.session:
-        print("Creating and configuring session...")
+        #print("Creating and configuring session...")
         if args.restart:
             try:
                 tmux.kill(args.session)
