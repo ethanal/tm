@@ -59,7 +59,7 @@ def make_pane_set(data):
             percentage = pane["size"]
             parent_percentage = percentage / (100.0 - cumulative) * 100.0
             cumulative += percentage
-            if cumulative < 99:
+            if cumulative != 100:
                 tmux.split_window(pane["id"], data["split"], 100 - int(parent_percentage))
             make_pane_set(pane)
 
