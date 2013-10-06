@@ -7,7 +7,7 @@ import tmux_wrapper as tmux
 import sessions
 
 __version__ = 1.0
-__description__ = "A tmux wrapper featuring shortcuts and session presets."
+__description__ = "A command-line tmux wrapper featuring shortcuts and JSON-configurable session presets."
 
 
 def main(argv=None):

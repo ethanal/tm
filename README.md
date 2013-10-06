@@ -1,6 +1,6 @@
 # tm
 
-A tmux wrapper featuring shortcuts and session presets.
+A command-line tmux wrapper featuring shortcuts and JSON-configurable session presets.
 
 ## Installation
 
@@ -14,8 +14,6 @@ $ python setup.py install
 
 ```
 tm [-h] [-l] [-k session] [-r] [session]
-
-A tmux wrapper featuring shortcuts and session presets.
 
 positional arguments:
   session               the name of the tmux session to start or attach
@@ -51,11 +49,11 @@ The session config file should have the following format:
 ```js
 {
   "<session name>": {
-  
+
     "<window name>": {
       "commands": ["<command>", "<command>", "<command>"]
     },
-    
+
     "<window name>": {
       "split": "<horizontal|vertical>",
       "panes": [
