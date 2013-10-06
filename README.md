@@ -6,7 +6,7 @@ A tmux wrapper featuring shortcuts and session presets.
 Configuration
 -------------
 
-Session configuration should be stored in the a JSON file set by the `TM_SESSIONS` envoronmental variable (e.g. `TM_SESSIONS=~/.tm_config.json`).
+Session configuration should be stored in the a JSON file set by the `TM_SESSIONS` environmental variable (e.g. `TM_SESSIONS=~/.tm_config.json`).
 
 The session config file should have the following format:
 
