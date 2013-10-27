@@ -76,7 +76,7 @@ def load_session_preset(session):
         else:
             tmux.new_window(window_index, name)
         data = mark_panes(data)
-        pprint.PrettyPrinter().pprint(dict(data))
+        #pprint.PrettyPrinter().pprint(dict(data))
 
         make_pane_set(data)
         window_index += 1

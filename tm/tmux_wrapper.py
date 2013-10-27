@@ -89,7 +89,7 @@ def rename_window(index, name):
 
 
 def split_window(pane, direction, percentage):
-    print "splitting {} {} {}".format(pane, direction, percentage)
+    # print "splitting {} {} {}".format(pane, direction, percentage)
     tmux_command("split-window -t {} -{} -p {}".format(pane, direction[0], str(percentage)))
 
 
