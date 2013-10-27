@@ -4,6 +4,7 @@ from collections import OrderedDict
 import json
 import os
 import tmux_wrapper as tmux
+import pprint
 
 id_counter = 0
 
@@ -24,7 +25,6 @@ def load_config():
 
 def mark_panes(data):
     global id_counter
-
     if "split" not in data:
         if "id" not in data:
             data["id"] = id_counter
@@ -32,21 +32,16 @@ def mark_panes(data):
         return data
     else:
         for i, pane in enumerate(data["panes"]):
-            inc = False
-            if "id" not in pane:
+            if "id" not in pane and "panes" not in pane:
                 data["panes"][i]["id"] = id_counter
-                inc = True
-            if "panes" in pane:
-                data["panes"][i]["panes"][0]["id"] = id_counter
-                inc = True
-            if inc:
                 id_counter += 1
-
+            elif "panes" in pane:
+                data["panes"][i]["panes"][0]["id"] = id_counter
+                id_counter += 1
 
         for i, pane in enumerate(data["panes"]):
             data["panes"][i] = mark_panes(pane)
         return data
-
 
 def make_pane_set(data):
     if "split" not in data:
@@ -59,8 +54,10 @@ def make_pane_set(data):
             percentage = pane["size"]
             parent_percentage = percentage / (100.0 - cumulative) * 100.0
             cumulative += percentage
-            if cumulative != 100:
-                tmux.split_window(pane["id"], data["split"], 100 - int(parent_percentage))
+            if "id" in pane and cumulative != 100:
+                tmux.split_window(pane["id"],
+                                  data["split"],
+                                  100 - int(parent_percentage))
             make_pane_set(pane)
 
 
@@ -79,6 +76,8 @@ def load_session_preset(session):
         else:
             tmux.new_window(window_index, name)
         data = mark_panes(data)
+        pprint.PrettyPrinter().pprint(dict(data))
+
         make_pane_set(data)
         window_index += 1
     tmux.select_window(0)
