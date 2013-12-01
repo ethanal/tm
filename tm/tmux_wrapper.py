@@ -61,8 +61,13 @@ def attach(session):
 
 def has_session(session):
     try:
-        r = tmux_command("has-session -t {}".format(session))
-        return r.process.returncode == 0
+        # default tmux functionality matches prefixes to existing sessions
+        # r = tmux_command("has-session -t {}".format(session))
+        # return r.process.returncode == 0
+
+        l = tmux_command("ls").out
+        sessions = [s.split(" ")[0][:-1] for s in l.split("\n")[:-1]]
+        return session in sessions
     except (ServerConnectionError, SessionDoesNotExist):
         return False
 
