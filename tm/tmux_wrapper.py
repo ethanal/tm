@@ -24,7 +24,7 @@ class CommandResponse(object):
 
 
 def tmux_command(command):
-    p = subprocess.Popen("tmux " + command,
+    p = subprocess.Popen("tmux -u " + command,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,
                          shell=True)
